@@ -4,6 +4,9 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
                  [reagent "0.6.1"]
+                 [datascript "0.16.1"]
+                 [funcool/clojure.jdbc "0.9.0"]
+                 [org.firebirdsql.jdbc/jaybird-jdk18 "2.2.10"]
                  [io.replikativ/replikativ "0.2.1"]]
 
   :min-lein-version "2.5.3"

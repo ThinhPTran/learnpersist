@@ -1,6 +1,8 @@
 (ns learnpersist.core
   (:require
-   [reagent.core :as r]))
+   [reagent.core :as r]
+   [learnpersist.db :as mydb]
+   [learnpersist.events :as events]))
 
 
 
@@ -14,8 +16,36 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Page
 
+(defn userdatoms []
+  (let [datoms (:datoms @mydb/app-state)]
+    [:div
+     [:input
+      {:type "button"
+       :value "Add datom"
+       :on-click (fn [_]
+                   (events/addDatom))}]
+     [:div "Datoms: "]
+     [:ul
+      (for [datom datoms]
+        ^{:key datom} [:li (str datom)])]]))
+
+
+(defn usercount []
+  (let [count (:count @mydb/app-state)]
+    [:div
+     [:div.row
+      [:div "Count: "]
+      [:div (str count)]]
+     [:input
+      {:type "button"
+       :value "Add"
+       :on-click (fn [_]
+                   (events/addCount))}]]))
+
 (defn page [ratom]
-  [:div "Welcome to reagent-figwheel."])
+  [:div "Welcome to reagent-figwheel."
+   [usercount]
+   [userdatoms]])
 
 
 
@@ -28,10 +58,14 @@
     (println "dev mode")))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Reload & Main
+
 (defn reload []
-  (reagent/render [page app-state]
-                  (.getElementById js/document "app")))
+  (r/render [page app-state]
+            (.getElementById js/document "app")))
 
 (defn ^:export main []
   (dev-setup)
-  (reload))
+  (reload)
+  (mydb/setupclientdata))
